@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Somali Presidential Election</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+            text-align: center;
+        }
+        .candidate-btn, .reset-btn {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🇸🇴 Somali Presidential Election</h1>
+    <p>Vote for your next president:</p>
+    <button class="candidate-btn" onclick="vote('hassan')">🗳 Hassan Sheikh</button>
+    <button class="candidate-btn" onclick="vote('farmajo')">🗳 Farmajo</button>
+    <button class="reset-btn" onclick="resetVotes()">🔄 Reset Votes</button>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        let votes = {
+            hassan: parseInt(localStorage.getItem('hassanVotes')) || 0,
+            farmajo: parseInt(localStorage.getItem('farmajoVotes')) || 0
+        };
+
+        function vote(candidate) {
+            votes[candidate]++;
+            localStorage.setItem('hassanVotes', votes.hassan);
+            localStorage.setItem('farmajoVotes', votes.farmajo);
+            displayResults();
+        }
+
+        function resetVotes() {
+            votes.hassan = 0;
+            votes.farmajo = 0;
+            localStorage.setItem('hassanVotes', 0);
+            localStorage.setItem('farmajoVotes', 0);
+            displayResults();
+        }
+
+        function displayResults() {
+            let total = votes.hassan + votes.farmajo;
+            let hassanPercent = total ? ((votes.hassan / total) * 100).toFixed(2) : 0;
+            let farmajoPercent = total ? ((votes.farmajo / total) * 100).toFixed(2) : 0;
+
+            let winner = "It's a tie! 🤝";
+            if (votes.hassan > votes.farmajo) winner = "Hassan Sheikh wins! 🎉";
+            else if (votes.farmajo > votes.hassan) winner = "Farmajo wins! 🎉";
+
+            document.getElementById("result").innerHTML = `
+                <p>Hassan Sheikh: ${votes.hassan} votes (${hassanPercent}%)</p>
+                <p>Farmajo: ${votes.farmajo} votes (${farmajoPercent}%)</p>
+                <h3>${winner}</h3>
+            `;
+        }
+
+        displayResults();
+    </script>
+</body>
+</html>
